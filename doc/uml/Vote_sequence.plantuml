@@ -2,9 +2,11 @@
 
 == Vote d'un livre ==
 
+autonumber
+
 Président -> System : Établit trois sélections
 Activate Président
-alt #lightblue Les dates sont valides
+alt#gold #lightblue Les dates sont valides
     System -> System : Enregistre les dates de sélection
 else #pink Dates non valides
     System -> Président : Message d'erreur
@@ -17,7 +19,7 @@ Activate System
 Activate Jury
 
 Jury -> System : Vote pour un livre
-alt #lightblue Vote valide
+alt#gold #lightblue Vote valide
     System -> System : Enregistre le vote
 else #pink Vote non valide
     System -> Jury : Message d'erreur

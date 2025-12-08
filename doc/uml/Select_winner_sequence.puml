@@ -1,0 +1,33 @@
+@startuml
+
+autonumber
+
+== Sélection d'un lauréat ==
+
+Président -> Système : Indique les livres de la sélection
+
+alt#gold #lightblue Dernier jour de sélection
+
+    Jury -> Système : Vote des 4 derniers livres
+    activate Jury
+    alt#gold #lightblue La sélection finale est valide
+        activate Système
+        Système -> Système : Enregistrement des votes
+        Système -> Président : Envoie des résultats
+        activate Président
+    else #pink
+        Système -> Jury : Message d'erreur
+        deactivate Système
+        deactivate Jury
+    end alt
+
+    Président -> Système : Sélection du lauréat de l'année
+    deactivate Président
+    activate Système
+
+    else #pink
+        Jury -> Système : Continuation de la sélection
+        activate Jury
+end alt
+
+@enduml
