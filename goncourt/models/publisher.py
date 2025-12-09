@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .book import Book
 
@@ -7,6 +8,7 @@ from .book import Book
 class Publisher:
     """Éditeur de livre :
     books : liste des livres édités"""
+    id: Optional[int]
     name: str
     books: list[Book] = field(default_factory=list, init=False)
 

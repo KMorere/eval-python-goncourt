@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, Optional
 
 if TYPE_CHECKING:
     from .author import Author
@@ -20,15 +20,16 @@ class Book:
     - isbn : international standard book number
     - price : prix du livre
     """
+    id: Optional[int]
     title: str
     summary: str
     author: 'Author'
     editor: 'Publisher'
-    characters: Union[str | list[str]]
     published_date: date
     page_amount: int
     isbn: str
     price: float
+    characters: Union[str | list[str]]
 
     def __str__(self) -> str:
         book = f"Title : {self.title},\n"

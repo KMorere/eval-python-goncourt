@@ -5,6 +5,10 @@ from models.jury import Jury
 from models.voter import Voter
 from datetime import date
 
+from daos.book_dao import BookDao
+from daos.author_dao import AuthorDao
+from daos.publisher_dao import PublisherDao
+
 
 class Goncourt:
     """Couche métier de l'application :
@@ -35,6 +39,18 @@ class Goncourt:
         return cls.winners.get(year)
 
     @staticmethod
+    def get_book_by_id(id_book: int) -> Book:
+        return BookDao().read(id_book)
+
+    @staticmethod
+    def get_author_by_id(id_author: int) -> Author:
+        return AuthorDao().read(id_author)
+
+    @staticmethod
+    def get_publisher_by_id(id_publisher: int) -> Publisher:
+        return PublisherDao().read(id_publisher)
+
+    @staticmethod
     def do_vote(voter: Voter, book: Book) -> str:
         return voter.vote(book)
 
@@ -42,12 +58,12 @@ class Goncourt:
     def start(cls):
         new_author: Author = Author("Great", "Author")
         new_publisher: Publisher = Publisher("Publisher")
-        new_book: Book = Book("Book", "I'm a book !", new_author, new_publisher, [],
-                            date(2025, 1, 1), 0, "", 0)
+        new_book: Book = Book(0, "Book", "I'm a book !", new_author, new_publisher,
+                            date(2025, 1, 1), 0, "", 0, [])
 
-        new_book2: Book = Book("Book the second", "It's book the second, electric boogaloo !",
-                                Author("Bad", "Author"), Publisher("Bookworm"), [],
-                                date(2025, 1, 1), 0, "", 0)
+        new_book2: Book = Book(0, "Book the second", "It's book the second, electric boogaloo !",
+                                Author("Bad", "Author"), Publisher("Bookworm"),
+                                date(2025, 1, 1), 0, "", 0, [])
 
         cls.add_selection_date(date(2025, 1, 1))
         for book in [new_book, new_book2]:

@@ -1,5 +1,6 @@
 from .person import Person
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .book import Book
 
@@ -8,6 +9,7 @@ from .book import Book
 class Author(Person):
     """Auteur d'un livre :
     - books : liste des livres écrits par l'auteur"""
+    id: Optional[int] = None
     books: list[Book] = field(default_factory=list, init=False)
 
     def __str__(self) -> str:
