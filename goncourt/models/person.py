@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Person(ABC):
+    """Classe abstraitre représentant une personne."""
     first_name: str
     last_name: str
 

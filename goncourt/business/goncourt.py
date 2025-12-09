@@ -7,18 +7,53 @@ from datetime import date
 
 
 class Goncourt:
+    """Couche métier de l'application :
+    - winners : collection des gagnants du concour par année
+    - selection : collection représentant une sélection de livre par date
+    """
+    winners: dict[str, Book]
+    selection: dict[date, list[Book]] = {}
+
+    @classmethod
+    def add_selection_date(cls, _date: date):
+        cls.selection[_date] = []
+
+    @classmethod
+    def add_book_at_date(cls, _date: date, book: Book):
+        cls.selection.get(_date).append(book)
+
+    @classmethod
+    def display_selection(cls) -> None:
+        """Affichage des livres de chaque sélection"""
+        for books in cls.selection.values():
+            for book in books:
+                print(book)
+                print()
+
+    @classmethod
+    def get_book_by_year(cls, year: str) -> Book:
+        return cls.winners.get(year)
+
     @staticmethod
     def do_vote(voter: Voter, book: Book) -> str:
         return voter.vote(book)
 
-    @staticmethod
-    def start():
+    @classmethod
+    def start(cls):
         new_author: Author = Author("Great", "Author")
         new_publisher: Publisher = Publisher("Publisher")
         new_book: Book = Book("Book", "I'm a book !", new_author, new_publisher, [],
-                              date(2025, 1, 1), 0, "", 0)
+                            date(2025, 1, 1), 0, "", 0)
 
-        print(new_book)
+        new_book2: Book = Book("Book the second", "It's book the second, electric boogaloo !",
+                                Author("Bad", "Author"), Publisher("Bookworm"), [],
+                                date(2025, 1, 1), 0, "", 0)
+
+        cls.add_selection_date(date(2025, 1, 1))
+        for book in [new_book, new_book2]:
+            cls.add_book_at_date(date(2025, 1, 1), book)
+
+        cls.display_selection()
 
         new_Jury: Jury = Jury("Unbiased", "Person")
-        print(Goncourt.do_vote(new_Jury, new_book))
+        print(cls.do_vote(new_Jury, new_book))

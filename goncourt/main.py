@@ -1,8 +1,11 @@
 from business.goncourt import Goncourt
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Programme principal."""
     goncourt: Goncourt = Goncourt()
     goncourt.start()
 
-    print()
+
+if __name__ == "__main__":
+    main()

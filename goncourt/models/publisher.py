@@ -5,6 +5,8 @@ from .book import Book
 
 @dataclass
 class Publisher:
+    """Éditeur de livre :
+    books : liste des livres édités"""
     name: str
     books: list[Book] = field(default_factory=list, init=False)
 

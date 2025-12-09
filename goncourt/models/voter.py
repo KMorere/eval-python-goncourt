@@ -6,5 +6,6 @@ if TYPE_CHECKING:
 
 
 class Voter(Protocol):
+    """Interface permettant le vote d'un livre."""
     def vote(self, book: 'Book'):
         ...
