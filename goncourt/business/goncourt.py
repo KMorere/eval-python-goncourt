@@ -4,6 +4,7 @@ from models.publisher import Publisher
 from models.jury import Jury
 from models.voter import Voter
 from datetime import date
+from typing import Union
 import locale
 
 from daos.book_dao import BookDao
@@ -16,8 +17,9 @@ class Goncourt:
     - winners : collection des gagnants du concour par année
     - selection : collection représentant une sélection de livre par date
     """
-    winners: dict[str, Book]
+    winners: dict[str, Book] = {}
     selection: dict[date, list[Book]] = {}
+    votes: dict[Book, int] = {}
 
 #region Méthode de classe
     @classmethod
@@ -25,7 +27,7 @@ class Goncourt:
         cls.selection[_date] = []
 
     @classmethod
-    def add_book_at_date(cls, _date: date, book: Book):
+    def add_book_at_date(cls, _date: date, book: Union[Book, list[Book]]):
         cls.selection.get(_date).append(book)
 
     @classmethod
@@ -50,6 +52,17 @@ class Goncourt:
     @classmethod
     def get_book_by_year(cls, year: str) -> Book:
         return cls.winners.get(year)
+
+    @classmethod
+    def add_vote(cls, book: Book):
+        if cls.votes.get(book):
+            cls.votes[book] += 1
+
+    @classmethod
+    def do_vote(cls, voter: Voter, book: Book) -> str:
+        if cls.votes.get(book):
+            cls.votes[book] += 1
+        return voter.vote(book)
 #endregion
 
 #region Méthodes statiques
@@ -68,10 +81,6 @@ class Goncourt:
     @staticmethod
     def get_publisher_by_id(id_publisher: int) -> Publisher:
         return PublisherDao().read(id_publisher)
-
-    @staticmethod
-    def do_vote(voter: Voter, book: Book) -> str:
-        return voter.vote(book)
 #endregion
 
     @classmethod

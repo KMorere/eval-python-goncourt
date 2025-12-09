@@ -20,6 +20,8 @@ def initialize_selection(goncourt: Goncourt):
             if type(book) is int:
                 book = goncourt.get_book_by_id(book)
             goncourt.add_book_at_date(_date, book)
+            if i == 2:
+                goncourt.votes[book] = 0
 
     print(goncourt.display_selection())
 
