@@ -32,7 +32,7 @@ class Book:
     characters: Union[str | list[str]]
 
     def __str__(self) -> str:
-        book = f"Title : {self.title},\n"
-        book += f"écrit par {self.author}\n"
-        book += f"édition {self.editor}."
+        book = f"Titre : {self.title},\n"
+        book += f"\t- par {self.author}\n"
+        book += f"\t- édition {self.editor}."
         return book
