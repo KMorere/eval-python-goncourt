@@ -1,7 +1,7 @@
 from models.book import Book
 from daos.dao import Dao
 from dataclasses import dataclass
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
 
 @dataclass
@@ -38,7 +38,11 @@ class BookDao(Dao[Book]):
                         rec['id_author'], rec['id_publisher'], rec['published_date'],
                         rec['page_amount'], rec['isbn'], rec['price'], rec['characters'])
                     for rec in record]
-            book.id = [rec['id_book'] for rec in record]
+            for i in range(cursor.rowcount):
+                book[i].id = record[i]['id_book']
+                from business.goncourt import Goncourt
+                book[i].author = Goncourt().get_author_by_id(record[i]['id_author'])
+                book[i].editor = Goncourt().get_publisher_by_id(record[i]['id_publisher'])
         else:
             book = None
 

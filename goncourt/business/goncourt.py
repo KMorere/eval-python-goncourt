@@ -35,12 +35,22 @@ class Goncourt:
                 print()
 
     @classmethod
+    def display_books(cls):
+        for book in cls.get_books():
+            print(book)
+            print()
+
+    @classmethod
     def get_book_by_year(cls, year: str) -> Book:
         return cls.winners.get(year)
 
     @staticmethod
     def get_book_by_id(id_book: int) -> Book:
         return BookDao().read(id_book)
+
+    @staticmethod
+    def get_books() -> list[Book]:
+        return BookDao().read_all()
 
     @staticmethod
     def get_author_by_id(id_author: int) -> Author:
@@ -55,7 +65,7 @@ class Goncourt:
         return voter.vote(book)
 
     @classmethod
-    def start(cls):
+    def start_test(cls):
         new_author: Author = Author("Great", "Author")
         new_publisher: Publisher = Publisher("Publisher")
         new_book: Book = Book(0, "Book", "I'm a book !", new_author, new_publisher,

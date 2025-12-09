@@ -25,12 +25,13 @@ class AuthorDao(Dao[Author]):
         author: Optional[list[Author]]
 
         with Dao.connection.cursor() as cursor:
-            query = "SELECT * FROM author"
+            query = "SELECT * FROM author LEFT JOIN person ON person.id_person = author.id_person"
             cursor.execute(query)
             record = cursor.fetchall()
         if record is not None:
-            author = [Author(rec['id_author'], rec['id_person']) for rec in record]
-            author.id = [rec['id_author'] for rec in record]
+            author = [Author(rec['first_name'], rec['last_name']) for rec in record]
+            for i in range(cursor.rowcount):
+                author[i].id = record[i]['id_author']
         else:
             author = None
 

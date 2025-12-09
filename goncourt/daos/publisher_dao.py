@@ -29,7 +29,6 @@ class PublisherDao(Dao[Publisher]):
             record = cursor.fetchone()
         if record is not None:
             publisher = [Publisher(rec['id_publisher'], rec['name']) for rec in record]
-            #publisher.id = [rec['id_publisher'] for rec in record]
         else:
             publisher = None
 
