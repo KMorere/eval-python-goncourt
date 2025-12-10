@@ -35,7 +35,10 @@ def main() -> None:
     goncourt: Goncourt = Goncourt()
     #initialize_selection(goncourt)
 
-    print(goncourt.get_selections_by_year(2025))
+    #print(goncourt.get_selections_by_year(2025))
+
+    #print(goncourt.start_vote(date(2025, 9, 3)))
+    goncourt.get_selections_by_date(date(2025, 10, 7))
 
     while True:
         read: str = input("Entrez le mode de connection : [0 = Utilisateur, 1 = Admin] \n")

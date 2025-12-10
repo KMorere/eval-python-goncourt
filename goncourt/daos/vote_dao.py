@@ -5,7 +5,7 @@ from typing import Optional
 
 
 @dataclass
-class JuryDao(Dao[Jury]):
+class VoteDao(Dao[Jury]):
     def read(self, id_jury: int) -> Optional[Jury]:
         jury: Optional[Jury]
 
@@ -31,9 +31,8 @@ class JuryDao(Dao[Jury]):
 
         with Dao.connection.cursor() as cursor:
             query = """
-                    SELECT * FROM vote 
+                    SELECT * FROM jury 
                     LEFT JOIN person ON person.id_person = jury.id_person
-                    WHERE id_jury = %s
                     """
             cursor.execute(query)
             record = cursor.fetchall()

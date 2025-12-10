@@ -32,20 +32,26 @@ class President(Person):
                                                      id_president=1,
                                                      id_book=goncourt.get_books()[i].id))
                 logging.info("Sélection 1 initialisé par %s %s.", self.first_name, self.last_name)
-            case 1:
+            case 1: # TODO : Remove repetition by using method.
                 _date = dates[1]
                 goncourt.add_selection_date(_date)
-                self.input_selection(_date, goncourt.selection.get(dates[0]), 8, goncourt)
+                self.input_selection(_date, goncourt.get_selections_by_date(dates[1]), 8, goncourt)
                 logging.info("Sélection 2 initialisé par %s %s.", self.first_name, self.last_name)
                 # Save on database
             case 2:
                 _date = dates[2]
                 goncourt.add_selection_date(_date)
-                self.input_selection(_date, goncourt.selection.get(dates[1]), 4, goncourt)
+                self.input_selection(_date, goncourt.get_selections_by_date(dates[1]), 4, goncourt)
                 logging.info("Sélection 3 initialisé par %s %s.", self.first_name, self.last_name)
                 # Save on database
             case 3:
                 # Vote randomly
+                _date = dates[3]
+                goncourt.add_selection_date(_date)
+                books = goncourt.start_vote(_date)
+                for book in books:
+                    print(book)
+                print("\nGagnant : ", books[0])
                 logging.info("Sélection terminé.")
 
     def input_selection(self, _date: date, books: list[Book], amount: int, goncourt: Goncourt):

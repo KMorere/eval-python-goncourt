@@ -60,6 +60,7 @@ class SelectionDao(Dao[Selection]):
                          for rec in record]
             for i in range(cursor.rowcount):
                 selection[i].id = record[i]['id_selection']
+                selection[i].id_book = record[i]['id_book']
         else:
             selection = None
 

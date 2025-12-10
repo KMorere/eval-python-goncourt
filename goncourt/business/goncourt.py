@@ -4,14 +4,17 @@ from models.publisher import Publisher
 from models.jury import Jury
 from models.selection import Selection
 from models.voter import Voter
+
 from datetime import date
 from typing import Union
 import locale
+import random
 
 from daos.book_dao import BookDao
 from daos.author_dao import AuthorDao
 from daos.publisher_dao import PublisherDao
 from daos.selection_dao import SelectionDao
+from daos.vote_dao import VoteDao
 
 
 class Goncourt:
@@ -21,7 +24,7 @@ class Goncourt:
     """
     winners: dict[str, Book] = {}
     selection: dict[date, list[Book]] = {}
-    votes: dict[Book, int] = {}
+    votes: dict[int, int] = {}
 
 #region Méthode de classe
     @classmethod
@@ -35,7 +38,7 @@ class Goncourt:
             if dates[i] in [sel.selection_date for sel in cls.get_selections()]:
                 cls.add_selection_date(dates[i])
                 if i > 0:
-                    cls.add_book_at_date(dates[i], cls.selection.get(dates[i - 1]))
+                    cls.add_book_at_date(dates[i], cls.get_selections_by_date(dates[i - 1]))
                 else:
                     cls.add_book_at_date(dates[0], cls.get_books())
         return dates
@@ -76,14 +79,31 @@ class Goncourt:
         return cls.winners.get(year)
 
     @classmethod
-    def add_vote(cls, book: Book):
-        if cls.votes.get(book):
-            cls.votes[book] += 1
+    def get_selections_by_date(cls, _date: date) -> list[Book]:
+        selection: list[Selection] = SelectionDao().read_all()
+        books = [book.id_book for book in selection if book.selection_date == _date]
+        return [cls.get_book_by_id(book) for book in books]
+
+    @classmethod
+    def start_vote(cls, _date: date) -> list[Book]:
+        """Retourne une liste de vote aléatoire des livres."""
+        cls.votes = {}
+        cls.add_selection_date(_date)
+        cls.add_book_at_date(_date, cls.get_books())
+
+        for jury in VoteDao().read_all():
+            book = random.choice(cls.selection.get(_date))
+            count = cls.votes.get(book.id, 0)
+            count += 1
+            cls.votes[book.id] = count
+
+        books = sorted(cls.votes, key=lambda k: cls.votes[k], reverse=True)
+        return [cls.get_book_by_id(book) for book in books]
 
     @classmethod
     def do_vote(cls, voter: Voter, book: Book) -> str:
-        if cls.votes.get(book):
-            cls.votes[book] += 1
+        if cls.votes.get(book.id) is not None:
+            cls.votes[book.id] += 1
         return voter.vote(book)
 #endregion
 
