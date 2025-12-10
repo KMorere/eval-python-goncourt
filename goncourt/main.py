@@ -34,8 +34,8 @@ def main() -> None:
     goncourt: Goncourt = Goncourt()
     #initialize_selection(goncourt)
 
-    # pres: President = President("Jesus", "Christ")
-    # pres.set_selection(date(2025, 9, 3))
+    pres: President = President("Jesus", "Christ")
+    pres.set_selection()
 
 
 if __name__ == "__main__":

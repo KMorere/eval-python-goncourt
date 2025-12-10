@@ -11,10 +11,10 @@ class SelectionDao(Dao[Selection]):
 
         with Dao.connection.cursor() as cursor:
             query = """
-            INSERT INTO selection (id_selection, selection_date, id_book, id_president) VALUES
+            INSERT INTO selection (id_selection, selection_date, id_president, id_book) VALUES
             (%s, %s, %s, %s)
             """
-            data = [selection.id, selection.selection_date, selection.id_book, selection.id_president]
+            data = [selection.id, selection.selection_date, selection.id_president, selection.id_book]
             cursor.execute(query, data)
             cursor.connection.commit()
             id_selection = cursor.rowcount
@@ -51,7 +51,7 @@ class SelectionDao(Dao[Selection]):
                     LEFT JOIN book ON book.id_book = selection.id_book
                     """
             cursor.execute(query)
-            record = cursor.fetchone()
+            record = cursor.fetchall()
         if record is not None:
             selection = [Selection(rec['selection_date'],
                                    rec['id_president'],

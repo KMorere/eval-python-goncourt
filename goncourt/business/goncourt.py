@@ -30,7 +30,11 @@ class Goncourt:
 
     @classmethod
     def add_book_at_date(cls, _date: date, book: Union[Book, list[Book]]):
-        cls.selection.get(_date).append(book)
+        if type(book) is list:
+            for b in book:
+                cls.selection.get(_date).append(b)
+        else:
+            cls.selection.get(_date).append(book)
 
     @classmethod
     def display_selection(cls) -> None:
@@ -87,6 +91,17 @@ class Goncourt:
     @staticmethod
     def get_selection_by_id(id_selection: int) -> Selection:
         return SelectionDao().read(id_selection)
+
+    @staticmethod
+    def get_selections_by_year(year: int) -> int:
+        selection: list[Selection] = SelectionDao().read_all()
+        if selection is None:
+            return 0
+        new_selection: set[Selection] = set()
+        for sel in selection:
+            if sel.selection_date.year == year:
+                new_selection.add(sel)
+        return len(new_selection)
 
     @staticmethod
     def get_selections() -> list[Selection]:
