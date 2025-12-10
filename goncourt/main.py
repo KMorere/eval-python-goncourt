@@ -1,6 +1,9 @@
 from business.goncourt import Goncourt
 from datetime import date
 from models.book import Book
+from models.president import President
+from models.selection import Selection
+from daos.selection_dao import SelectionDao
 
 
 def initialize_selection(goncourt: Goncourt):
@@ -29,9 +32,10 @@ def initialize_selection(goncourt: Goncourt):
 def main() -> None:
     """Programme principal."""
     goncourt: Goncourt = Goncourt()
-    initialize_selection(goncourt)
+    #initialize_selection(goncourt)
 
-    #print(goncourt.display_books())
+    # pres: President = President("Jesus", "Christ")
+    # pres.set_selection(date(2025, 9, 3))
 
 
 if __name__ == "__main__":

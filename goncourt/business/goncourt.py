@@ -2,6 +2,7 @@ from models.book import Book
 from models.author import Author
 from models.publisher import Publisher
 from models.jury import Jury
+from models.selection import Selection
 from models.voter import Voter
 from datetime import date
 from typing import Union
@@ -10,6 +11,7 @@ import locale
 from daos.book_dao import BookDao
 from daos.author_dao import AuthorDao
 from daos.publisher_dao import PublisherDao
+from daos.selection_dao import SelectionDao
 
 
 class Goncourt:
@@ -81,6 +83,18 @@ class Goncourt:
     @staticmethod
     def get_publisher_by_id(id_publisher: int) -> Publisher:
         return PublisherDao().read(id_publisher)
+
+    @staticmethod
+    def get_selection_by_id(id_selection: int) -> Selection:
+        return SelectionDao().read(id_selection)
+
+    @staticmethod
+    def get_selections() -> list[Selection]:
+        return SelectionDao().read_all()
+
+    @staticmethod
+    def set_selection(selection: Selection) -> int:
+        return SelectionDao().create(selection)
 #endregion
 
     @classmethod

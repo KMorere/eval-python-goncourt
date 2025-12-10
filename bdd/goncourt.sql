@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 08 déc. 2025 à 14:43
+-- Généré le : mer. 10 déc. 2025 à 09:16
 -- Version du serveur : 8.4.7
 -- Version de PHP : 8.3.28
 
@@ -164,6 +164,27 @@ INSERT INTO `person` (`id_person`, `first_name`, `last_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `president`
+--
+
+DROP TABLE IF EXISTS `president`;
+CREATE TABLE IF NOT EXISTS `president` (
+  `id_president` int NOT NULL AUTO_INCREMENT,
+  `id_person` int DEFAULT NULL,
+  PRIMARY KEY (`id_president`),
+  KEY `id_person` (`id_person`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `president`
+--
+
+INSERT INTO `president` (`id_president`, `id_person`) VALUES
+(1, 5);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `publisher`
 --
 
@@ -192,6 +213,40 @@ INSERT INTO `publisher` (`id_publisher`, `name`) VALUES
 (11, 'Verdier'),
 (12, 'R. Laffont'),
 (13, 'Verticales');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `selection`
+--
+
+DROP TABLE IF EXISTS `selection`;
+CREATE TABLE IF NOT EXISTS `selection` (
+  `id_selection` int NOT NULL AUTO_INCREMENT,
+  `selection_date` date NOT NULL,
+  `id_president` int DEFAULT NULL,
+  `id_book` int DEFAULT NULL,
+  PRIMARY KEY (`id_selection`),
+  KEY `id_president` (`id_president`),
+  KEY `id_book` (`id_book`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `vote`
+--
+
+DROP TABLE IF EXISTS `vote`;
+CREATE TABLE IF NOT EXISTS `vote` (
+  `id_jury` int NOT NULL,
+  `id_book` int NOT NULL,
+  `selection_date` date NOT NULL,
+  `vote_count` int DEFAULT NULL,
+  PRIMARY KEY (`id_jury`,`id_book`),
+  KEY `id_jury` (`id_jury`),
+  KEY `id_book` (`id_book`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -231,6 +286,26 @@ ALTER TABLE `book`
 ALTER TABLE `jury`
   ADD CONSTRAINT `jury_fk_1` FOREIGN KEY (`id_book`) REFERENCES `book` (`id_book`),
   ADD CONSTRAINT `jury_fk_2` FOREIGN KEY (`id_person`) REFERENCES `person` (`id_person`);
+
+--
+-- Contraintes pour la table `president`
+--
+ALTER TABLE `president`
+  ADD CONSTRAINT `president_fk_p_id` FOREIGN KEY (`id_person`) REFERENCES `person` (`id_person`);
+
+--
+-- Contraintes pour la table `selection`
+--
+ALTER TABLE `selection`
+  ADD CONSTRAINT `selection_fk_b_id` FOREIGN KEY (`id_book`) REFERENCES `book` (`id_book`),
+  ADD CONSTRAINT `selection_fk_p_id` FOREIGN KEY (`id_president`) REFERENCES `president` (`id_president`);
+
+--
+-- Contraintes pour la table `vote`
+--
+ALTER TABLE `vote`
+  ADD CONSTRAINT `id_book` FOREIGN KEY (`id_book`) REFERENCES `book` (`id_book`),
+  ADD CONSTRAINT `id_jury` FOREIGN KEY (`id_jury`) REFERENCES `jury` (`id_jury`);
 
 --
 -- Contraintes pour la table `winner`
