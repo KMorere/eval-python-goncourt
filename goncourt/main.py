@@ -34,8 +34,20 @@ def main() -> None:
     goncourt: Goncourt = Goncourt()
     #initialize_selection(goncourt)
 
-    pres: President = President("Jesus", "Christ")
-    pres.set_selection()
+    while True:
+        read: str = input("Entrez le mode de connection : [0 = Utilisateur, 1 = Admin] \n")
+
+        if read.isdigit() and read == "0":
+            print("Mode utilisateur")
+            goncourt.set_selection_dates()
+            goncourt.display_selection()
+        else:
+            read = input("Entrez le mot de passe : ")
+
+            if read == "evaluation":
+                pres: President = President("Jesus", "Christ")
+                print(f"Bienvenu {pres}")
+                pres.set_selection()
 
 
 if __name__ == "__main__":

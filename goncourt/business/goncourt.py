@@ -25,6 +25,22 @@ class Goncourt:
 
 #region Méthode de classe
     @classmethod
+    def set_selection_dates(cls) -> list[date]:
+        dates: list[date] = [date(2025, 9, 3),
+                             date(2025, 10, 7),
+                             date(2025, 10, 28),
+                             date(2025, 11, 4)]
+
+        for i in range(len(dates)):
+            if dates[i] in [sel.selection_date for sel in cls.get_selections()]:
+                cls.add_selection_date(dates[i])
+                if i > 0:
+                    cls.add_book_at_date(dates[i], cls.selection.get(dates[i - 1]))
+                else:
+                    cls.add_book_at_date(dates[0], cls.get_books())
+        return dates
+
+    @classmethod
     def add_selection_date(cls, _date: date):
         cls.selection[_date] = []
 

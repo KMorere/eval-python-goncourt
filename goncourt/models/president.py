@@ -21,18 +21,7 @@ class President(Person):
         #     goncourt.add_book_at_date(date(2025, 9, 3), goncourt.get_books())
 
         # Read database for the selection
-        dates: list[date] = [date(2025, 9, 3),
-                             date(2025, 10, 7),
-                             date(2025, 10, 28),
-                             date(2025, 11, 4)]
-
-        for i in range(len(dates)):
-            if dates[i] in [sel.selection_date for sel in goncourt.get_selections()]:
-                goncourt.add_selection_date(dates[i])
-                if i > 0:
-                    goncourt.add_book_at_date(dates[i], goncourt.selection.get(dates[i-1]))
-                else:
-                    goncourt.add_book_at_date(dates[0], goncourt.get_books())
+        dates = goncourt.set_selection()
 
         match len(goncourt.selection.keys()):
             case 0:
@@ -69,8 +58,6 @@ class President(Person):
                 current_books.remove(goncourt.get_book_by_id(int(read)))
                 new_books.append(goncourt.get_book_by_id(int(read)))
                 amount -= 1
-
-        goncourt.display_selection()
 
         for book in new_books: # TODO: Change id_president to this instance's id.
             goncourt.set_selection(Selection(selection_date=_date,
