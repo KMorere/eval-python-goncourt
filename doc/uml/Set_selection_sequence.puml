@@ -1,0 +1,43 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+== Préparation de la sélection ==
+
+Président -> Système : Ajoute une date de sélection
+activate Président
+
+alt#gold #lightblue La date de sélection est valide
+    activate Système
+    Système -> SQL : Insertion des données
+    activate SQL
+    SQL --> Système : Retourne les données ajoutés
+    deactivate SQL
+    Système --> Président : Confirmation de la sélection
+else #pink Date non successives à la précédente
+    Système -> Président : Message d'erreur
+    deactivate Système
+end alt
+deactivate Président
+
+== Vote ==
+
+Président -> Système : Indique la sélection pour les utilisateurs
+activate Président
+activate Système
+
+Système -> Jury : Demande de voter pour la sélection
+activate Jury
+Jury --> Système : Retourne son vote
+deactivate Jury
+
+alt#gold #lightblue Dernier tour de la sélection
+    Système -> SQL : Insertion du lauréat
+    activate SQL
+    SQL --> Système : Retourne les données ajoutés
+    deactivate SQL
+    Système --> Président : Renvoie le nombre de votes
+end alt
+
+@enduml

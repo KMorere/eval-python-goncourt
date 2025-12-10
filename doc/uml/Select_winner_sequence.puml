@@ -5,13 +5,14 @@ autonumber
 == Sélection d'un lauréat ==
 
 Président -> Système : Indique les livres de la sélection
+activate Président
+activate Système
+deactivate Président
 
 alt#gold #lightblue Dernier jour de sélection
-
     Jury -> Système : Vote des 4 derniers livres
     activate Jury
     alt#gold #lightblue La sélection finale est valide
-        activate Système
         Système -> Système : Enregistrement des votes
         Système -> Président : Envoie des résultats
         activate Président

@@ -7,6 +7,7 @@ from typing import Optional
 @dataclass
 class SelectionDao(Dao[Selection]):
     def create(self, selection: Selection) -> int:
+        """Permet l'insertion des données d'une sélection."""
         id_selection: int = 0
 
         with Dao.connection.cursor() as cursor:

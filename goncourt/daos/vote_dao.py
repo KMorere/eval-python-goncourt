@@ -5,14 +5,13 @@ from typing import Optional
 
 
 @dataclass
-class VoteDao(Dao[Jury]):
+class JuryDao(Dao[Jury]):
     def read(self, id_jury: int) -> Optional[Jury]:
         jury: Optional[Jury]
 
         with Dao.connection.cursor() as cursor:
             query = """
-            SELECT * FROM vote 
-            LEFT JOIN jury ON jury.id_person = vote.id_jury
+            SELECT * FROM jury
             LEFT JOIN person ON person.id_person = jury.id_person
             WHERE id_jury = %s
             """
@@ -21,6 +20,7 @@ class VoteDao(Dao[Jury]):
         if record is not None:
             jury = Jury(record['first_name'], record['last_name'])
             jury.id = record['id_jury']
+            jury.password = record['jury_password']
         else:
             jury = None
 
@@ -32,7 +32,6 @@ class VoteDao(Dao[Jury]):
         with Dao.connection.cursor() as cursor:
             query = """
                     SELECT * FROM vote 
-                    LEFT JOIN jury ON jury.id_person = vote.id_jury
                     LEFT JOIN person ON person.id_person = jury.id_person
                     WHERE id_jury = %s
                     """
@@ -42,6 +41,7 @@ class VoteDao(Dao[Jury]):
             jury = [Jury(rec['first_name'], rec['last_name']) for rec in record]
             for i in range(cursor.rowcount):
                 jury[i].id = record[i]['id_jury']
+                jury[i].password = record[i]['jury_password']
         else:
             jury = None
 

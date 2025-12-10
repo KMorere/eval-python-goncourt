@@ -1,9 +1,7 @@
 from business.goncourt import Goncourt
 from datetime import date
-from models.book import Book
+import logging
 from models.president import President
-from models.selection import Selection
-from daos.selection_dao import SelectionDao
 
 
 def initialize_selection(goncourt: Goncourt):
@@ -31,8 +29,13 @@ def initialize_selection(goncourt: Goncourt):
 
 def main() -> None:
     """Programme principal."""
+    form = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=form, level=logging.INFO, datefmt="%H:%m:%S")
+
     goncourt: Goncourt = Goncourt()
     #initialize_selection(goncourt)
+
+    print(goncourt.get_selections_by_year(2025))
 
     while True:
         read: str = input("Entrez le mode de connection : [0 = Utilisateur, 1 = Admin] \n")

@@ -113,9 +113,10 @@ class Goncourt:
         selection: list[Selection] = SelectionDao().read_all()
         if selection is None:
             return 0
-        new_selection: set[Selection] = set()
+        new_selection: set[date] = set()
         for sel in selection:
-            if sel.selection_date.year == year:
+            sel = sel.selection_date
+            if sel.year == year:
                 new_selection.add(sel)
         return len(new_selection)
 

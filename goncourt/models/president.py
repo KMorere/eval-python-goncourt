@@ -5,6 +5,7 @@ from .book import Book
 from business.goncourt import Goncourt
 from copy import deepcopy
 from typing import Optional
+import logging
 
 from .selection import Selection
 
@@ -15,15 +16,13 @@ class President(Person):
     id: Optional[int] = None
 
     def set_selection(self):
+        """Initialise le déroulement d'une sélection par le président."""
         goncourt: Goncourt = Goncourt()
-        # if len(goncourt.selection.keys()) == 0:
-        #     #goncourt.add_selection_date(date(2025, 9, 3))
-        #     goncourt.add_book_at_date(date(2025, 9, 3), goncourt.get_books())
 
         # Read database for the selection
-        dates = goncourt.set_selection()
+        dates = goncourt.set_selection_dates()
 
-        match len(goncourt.selection.keys()):
+        match goncourt.get_selections_by_year(2025):
             case 0:
                 goncourt.add_selection_date(dates[0])
                 goncourt.add_book_at_date(dates[0], goncourt.get_books())
@@ -32,22 +31,25 @@ class President(Person):
                     goncourt.set_selection(Selection(selection_date=dates[0],
                                                      id_president=1,
                                                      id_book=goncourt.get_books()[i].id))
-                print("Sélection 1 initialisé.")
+                logging.info("Sélection 1 initialisé par %s %s.", self.first_name, self.last_name)
             case 1:
                 _date = dates[1]
                 goncourt.add_selection_date(_date)
                 self.input_selection(_date, goncourt.selection.get(dates[0]), 8, goncourt)
+                logging.info("Sélection 2 initialisé par %s %s.", self.first_name, self.last_name)
                 # Save on database
             case 2:
                 _date = dates[2]
                 goncourt.add_selection_date(_date)
                 self.input_selection(_date, goncourt.selection.get(dates[1]), 4, goncourt)
+                logging.info("Sélection 3 initialisé par %s %s.", self.first_name, self.last_name)
                 # Save on database
             case 3:
                 # Vote randomly
-                print()
+                logging.info("Sélection terminé.")
 
     def input_selection(self, _date: date, books: list[Book], amount: int, goncourt: Goncourt):
+        """Demande au président les livres à ajouter dans la sélection."""
         current_books: list[Book] = deepcopy(books)
         new_books: list[Book] = []
 

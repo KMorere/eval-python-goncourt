@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 10 déc. 2025 à 09:16
+-- Généré le : mer. 10 déc. 2025 à 13:11
 -- Version du serveur : 8.4.7
 -- Version de PHP : 8.3.28
 
@@ -109,12 +109,27 @@ INSERT INTO `book` (`id_book`, `title`, `summary`, `id_author`, `id_publisher`, 
 DROP TABLE IF EXISTS `jury`;
 CREATE TABLE IF NOT EXISTS `jury` (
   `id_jury` int NOT NULL AUTO_INCREMENT,
-  `id_book` int NOT NULL,
   `id_person` int NOT NULL,
+  `jury_password` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id_jury`),
-  KEY `id_book` (`id_book`),
   KEY `id_person` (`id_person`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `jury`
+--
+
+INSERT INTO `jury` (`id_jury`, `id_person`, `jury_password`) VALUES
+(1, 1, 'didier'),
+(2, 2, 'françoise'),
+(3, 3, 'taharben'),
+(4, 4, 'paule'),
+(5, 5, 'philippe'),
+(6, 6, 'pierre'),
+(7, 7, 'eric'),
+(8, 8, 'camille'),
+(9, 9, 'pascal'),
+(10, 10, 'christine');
 
 -- --------------------------------------------------------
 
@@ -229,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `selection` (
   PRIMARY KEY (`id_selection`),
   KEY `id_president` (`id_president`),
   KEY `id_book` (`id_book`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -284,7 +299,6 @@ ALTER TABLE `book`
 -- Contraintes pour la table `jury`
 --
 ALTER TABLE `jury`
-  ADD CONSTRAINT `jury_fk_1` FOREIGN KEY (`id_book`) REFERENCES `book` (`id_book`),
   ADD CONSTRAINT `jury_fk_2` FOREIGN KEY (`id_person`) REFERENCES `person` (`id_person`);
 
 --
