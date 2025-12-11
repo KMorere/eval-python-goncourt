@@ -29,6 +29,8 @@ class Goncourt:
 #region Méthode de classe
     @classmethod
     def set_selection_dates(cls) -> list[date]:
+        """Récupère la sélection aux dates données
+         et l'enregistre dans le dictionnaire 'selection'."""
         dates: list[date] = [date(2025, 9, 3),
                              date(2025, 10, 7),
                              date(2025, 10, 28),
@@ -80,6 +82,8 @@ class Goncourt:
 
     @classmethod
     def get_selections_by_date(cls, _date: date) -> list[Book]:
+        """Récupère tout les livres à une date '_date'.
+        (Utilisé pour récupérer une sélection précise)"""
         selection: list[Selection] = SelectionDao().read_all()
         books = [book.id_book for book in selection if book.selection_date == _date]
         return [cls.get_book_by_id(book) for book in books]
@@ -91,7 +95,7 @@ class Goncourt:
         cls.add_selection_date(_date)
         cls.add_book_at_date(_date, cls.get_books())
 
-        for jury in VoteDao().read_all():
+        for jury in VoteDao().read_all(): # TODO: Could use iterator 'jury' to know who voted for a book.
             book = random.choice(cls.selection.get(_date))
             count = cls.votes.get(book.id, 0)
             count += 1
