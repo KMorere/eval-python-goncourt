@@ -8,7 +8,7 @@ Et également lui permettre d'indiquer le nombre de votes pour le dernier tour.
 ## Documents :
 Le projet est séparé en 3 documents principaux :
 - bdd : Export des éléments dans la base de donnée,
-- uml (fichiers + png) :
+- doc -> uml (fichiers + png) :
   - Diagramme de classe,
   - Diagramme de cas d'utilisation,
   - Diagrammes de séquences.
