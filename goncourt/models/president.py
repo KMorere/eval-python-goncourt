@@ -32,18 +32,12 @@ class President(Person):
                                                      id_president=1,
                                                      id_book=goncourt.get_books()[i].id))
                 logging.info("Sélection 1 initialisé par %s %s.", self.first_name, self.last_name)
-            case 1: # TODO : Remove repetition by using method.
-                _date = dates[1]
-                goncourt.add_selection_date(_date)
-                self.input_selection(_date, goncourt.get_selections_by_date(dates[0]), 8, goncourt)
-                logging.info("Sélection 2 initialisé par %s %s.", self.first_name, self.last_name)
+            case 1:
                 # Save on database
+                self.add_selection(dates[1], dates[0], 8, "Sélection 2 initialisé par %s %s.", goncourt)
             case 2:
-                _date = dates[2]
-                goncourt.add_selection_date(_date)
-                self.input_selection(_date, goncourt.get_selections_by_date(dates[1]), 4, goncourt)
-                logging.info("Sélection 3 initialisé par %s %s.", self.first_name, self.last_name)
                 # Save on database
+                self.add_selection(dates[2], dates[1], 4, "Sélection 3 initialisé par %s %s.", goncourt)
             case 3:
                 # Vote randomly
                 _date = dates[3]
@@ -53,6 +47,12 @@ class President(Person):
                     print(book)
                 print("\nGagnant : ", books[0])
                 logging.info("Sélection terminé.")
+
+    def add_selection(self, current_date: date, previous_date: date, amount: int, log: str, goncourt: Goncourt):
+        """Ajoute une nouvelle date et des livres sur une sélection."""
+        goncourt.add_selection_date(current_date)
+        self.input_selection(current_date, goncourt.get_selections_by_date(previous_date), amount, goncourt)
+        logging.info(log, self.first_name, self.last_name)
 
     def input_selection(self, _date: date, books: list[Book], amount: int, goncourt: Goncourt):
         """Demande au président les livres à ajouter dans la sélection."""

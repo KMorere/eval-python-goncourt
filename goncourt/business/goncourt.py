@@ -47,10 +47,12 @@ class Goncourt:
 
     @classmethod
     def add_selection_date(cls, _date: date):
+        """Ajoute une nouvelle entrée au dictionnaire 'selection'."""
         cls.selection[_date] = []
 
     @classmethod
     def add_book_at_date(cls, _date: date, book: Union[Book, list[Book]]):
+        """Ajoute un ou plusieurs livre(s) à la sélection depuis une date '_date'."""
         if type(book) is list:
             for b in book:
                 cls.selection.get(_date).append(b)
@@ -109,6 +111,7 @@ class Goncourt:
 
     @classmethod
     def do_vote(cls, voter: Voter, book: Book) -> str:
+        """Méthode vote du protocole 'Voter'."""
         if cls.votes.get(book.id) is not None:
             cls.votes[book.id] += 1
         return voter.vote(book)
