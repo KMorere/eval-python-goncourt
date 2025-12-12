@@ -1,3 +1,6 @@
+from pymysql.cursors import DictCursor
+from typing import Any, cast, Dict
+
 from models.selection import Selection
 from daos.dao import Dao
 from dataclasses import dataclass
@@ -22,29 +25,35 @@ class SelectionDao(Dao[Selection]):
 
         return id_selection
 
+    @staticmethod
+    def selection_from_db(record: Optional[Dict[str, Any]]) -> Selection:
+        selection: Selection = Selection(selection_date=record['selection_date'],
+                                         id_president=record['id_president'],
+                                         id_book=record['id_book'])
+        selection.id = record['id_selection']
+
+        return selection
+
     def read(self, id_selection: int) -> Optional[Selection]:
         selection: Optional[Selection]
 
-        with Dao.connection.cursor() as cursor:
+        with Dao.connection.cursor(DictCursor) as cursor:
             query = """
             SELECT * FROM selection 
             LEFT JOIN book ON book.id_book = selection.id_book
             WHERE id_selection = %s
             """
             cursor.execute(query, (id_selection,))
-            record = cursor.fetchone()
+            record = cast(Optional[Dict[str, Any]], cursor.fetchone())
         if record is not None:
-            selection = Selection(selection_date=record['selection_date'],
-                                  id_president=record['id_president'],
-                                  id_book=record['id_book'])
-            selection.id = record['id_selection']
+            selection = self.selection_from_db(record)
         else:
             selection = None
 
         return selection
 
-    def read_all(self) -> Optional[list[Selection]]:
-        selection: Optional[list[Selection]]
+    def read_all(self) -> list[Selection]:
+        selection: list[Selection] = []
 
         with Dao.connection.cursor() as cursor:
             query = """
@@ -53,15 +62,8 @@ class SelectionDao(Dao[Selection]):
                     """
             cursor.execute(query)
             record = cursor.fetchall()
-        if record is not None:
-            selection = [Selection(rec['selection_date'],
-                                   rec['id_president'],
-                                   rec['id_book'])
-                         for rec in record]
-            for i in range(cursor.rowcount):
-                selection[i].id = record[i]['id_selection']
-                selection[i].id_book = record[i]['id_book']
-        else:
-            selection = None
+        for rec in record:
+            selection.append(self.selection_from_db(
+                cast(Optional[Dict[str, Any]], cast(object, rec))))
 
         return selection

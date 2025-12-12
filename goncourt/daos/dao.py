@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from typing import ClassVar, Optional
 import pymysql.cursors
+from pymysql.cursors import DictCursor
 
 
 @dataclass
@@ -12,7 +13,7 @@ class Dao[T](ABC):
                         user='goncourt',
                         password='evaluation',
                         database='goncourt',
-                        cursorclass=pymysql.cursors.DictCursor)
+                        cursorclass=DictCursor)
 
     @abstractmethod
     def read(self, id_entity: int) -> Optional[T]:
