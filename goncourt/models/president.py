@@ -67,7 +67,7 @@ class President(Person):
                 new_books.append(goncourt.get_book_by_id(int(read)))
                 amount -= 1
 
-        for book in new_books: # TODO: Change id_president to this instance's id.
+        for book in new_books:
             goncourt.set_selection(Selection(selection_date=_date,
                                              id_president=1,
                                              id_book=book.id))
