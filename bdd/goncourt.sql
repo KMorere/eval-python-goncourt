@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 10 déc. 2025 à 13:11
+-- Généré le : ven. 12 déc. 2025 à 12:47
 -- Version du serveur : 8.4.7
 -- Version de PHP : 8.3.28
 
@@ -99,6 +99,21 @@ INSERT INTO `book` (`id_book`, `title`, `summary`, `id_author`, `id_publisher`, 
 (13, 'Tambora', '', 13, 11, '2025-08-28', 192, '9782378562588', 18.50, ''),
 (14, 'Perpétuité', '', 14, 13, '2025-08-21', 331, '9782073105455', 22.00, ''),
 (15, 'Le crépuscule des hommes', '', 15, 12, '2025-08-28', 382, '9782221267660', 22.00, '');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `book_selection`
+--
+
+DROP TABLE IF EXISTS `book_selection`;
+CREATE TABLE IF NOT EXISTS `book_selection` (
+  `id_book` int NOT NULL,
+  `id_selection` int NOT NULL,
+  PRIMARY KEY (`id_book`,`id_selection`),
+  KEY `id_book` (`id_book`),
+  KEY `id_selection` (`id_selection`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -244,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `selection` (
   PRIMARY KEY (`id_selection`),
   KEY `id_president` (`id_president`),
   KEY `id_book` (`id_book`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -294,6 +309,13 @@ ALTER TABLE `author`
 ALTER TABLE `book`
   ADD CONSTRAINT `book_fk_1` FOREIGN KEY (`id_author`) REFERENCES `author` (`id_author`),
   ADD CONSTRAINT `book_fk_2` FOREIGN KEY (`id_publisher`) REFERENCES `publisher` (`id_publisher`);
+
+--
+-- Contraintes pour la table `book_selection`
+--
+ALTER TABLE `book_selection`
+  ADD CONSTRAINT `b_s_fk_1` FOREIGN KEY (`id_book`) REFERENCES `book` (`id_book`),
+  ADD CONSTRAINT `b_s_fk_2` FOREIGN KEY (`id_selection`) REFERENCES `selection` (`id_selection`);
 
 --
 -- Contraintes pour la table `jury`
