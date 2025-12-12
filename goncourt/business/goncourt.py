@@ -1,7 +1,6 @@
 from models.book import Book
 from models.author import Author
 from models.publisher import Publisher
-from models.jury import Jury
 from models.selection import Selection
 from models.voter import Voter
 
@@ -9,6 +8,7 @@ from datetime import date
 from typing import Union
 import locale
 import random
+import logging
 
 from daos.book_dao import BookDao
 from daos.author_dao import AuthorDao
@@ -89,19 +89,22 @@ class Goncourt:
         return [cls.get_book_by_id(book) for book in books]
 
     @classmethod
-    def start_vote(cls, _date: date) -> list[Book]:
+    def start_vote(cls, vote_date: date, previous_date: date) -> list[Book]:
         """Retourne une liste de vote aléatoire des livres."""
         cls.votes = {}
-        cls.add_selection_date(_date)
-        cls.add_book_at_date(_date, cls.get_books())
+        cls.add_selection_date(vote_date)
+        cls.add_book_at_date(vote_date, cls.get_books())
 
-        for jury in VoteDao().read_all(): # TODO: Could use iterator 'jury' to know who voted for a book.
-            book = random.choice(cls.selection.get(_date))
+        for _ in VoteDao().read_all():  # TODO: Could use iterator 'jury' to know who voted for a book.
+            book = random.choice(cls.get_selections_by_date(previous_date))
             count = cls.votes.get(book.id, 0)
             count += 1
             cls.votes[book.id] = count
 
         books = sorted(cls.votes, key=lambda k: cls.votes[k], reverse=True)
+        if len(cls.get_selections_by_date(previous_date)) < 4 or len(books):
+            logging.error("[!]ERREUR : Sélection trop courte [!]")
+            raise Exception("[!]ERREUR : Sélection trop courte [!]")
         return [cls.get_book_by_id(book) for book in books]
 
     @classmethod
@@ -152,23 +155,3 @@ class Goncourt:
     def set_selection(selection: Selection) -> int:
         return SelectionDao().create(selection)
 #endregion
-
-    @classmethod
-    def start_test(cls):
-        new_author: Author = Author("Great", "Author")
-        new_publisher: Publisher = Publisher("Publisher")
-        new_book: Book = Book(0, "Book", "I'm a book !", new_author, new_publisher,
-                            date(2025, 1, 1), 0, "", 0, [])
-
-        new_book2: Book = Book(0, "Book the second", "It's book the second, electric boogaloo !",
-                                Author("Bad", "Author"), Publisher("Bookworm"),
-                                date(2025, 1, 1), 0, "", 0, [])
-
-        cls.add_selection_date(date(2025, 1, 1))
-        for book in [new_book, new_book2]:
-            cls.add_book_at_date(date(2025, 1, 1), book)
-
-        cls.display_selection()
-
-        new_Jury: Jury = Jury("Unbiased", "Person")
-        print(cls.do_vote(new_Jury, new_book))

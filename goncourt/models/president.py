@@ -48,7 +48,7 @@ class President(Person):
                 # Vote randomly
                 _date = dates[3]
                 goncourt.add_selection_date(_date)
-                books = goncourt.start_vote(_date)
+                books = goncourt.start_vote(_date, dates[2])
                 for book in books:
                     print(book)
                 print("\nGagnant : ", books[0])
