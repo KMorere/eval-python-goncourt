@@ -35,7 +35,7 @@ class President(Person):
             case 1: # TODO : Remove repetition by using method.
                 _date = dates[1]
                 goncourt.add_selection_date(_date)
-                self.input_selection(_date, goncourt.get_selections_by_date(dates[1]), 8, goncourt)
+                self.input_selection(_date, goncourt.get_selections_by_date(dates[0]), 8, goncourt)
                 logging.info("Sélection 2 initialisé par %s %s.", self.first_name, self.last_name)
                 # Save on database
             case 2:

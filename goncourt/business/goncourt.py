@@ -40,7 +40,7 @@ class Goncourt:
             if dates[i] in [sel.selection_date for sel in cls.get_selections()]:
                 cls.add_selection_date(dates[i])
                 if i > 0:
-                    cls.add_book_at_date(dates[i], cls.get_selections_by_date(dates[i - 1]))
+                    cls.add_book_at_date(dates[i], cls.get_selections_by_date(dates[i]))
                 else:
                     cls.add_book_at_date(dates[0], cls.get_books())
         return dates
@@ -63,7 +63,7 @@ class Goncourt:
         dates: list[date] = list(cls.selection.keys())
         locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
 
-        for i, books in enumerate(cls.selection.values()):
+        for i, (_date, books) in enumerate(cls.selection.items()):
             print(f"[Sélection {i+1} du {dates[i].strftime('%A %d %B %Y')}]")
             for book in books:
                 print(book)
